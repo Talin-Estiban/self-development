@@ -4,8 +4,9 @@ Created on Mon Dec 18 16:57:37 2023
 
 @author: talin
 """
-"""
+
 class Person:
+    x=1 #class variable, shared between all instances. inside the class can be accesed by self.x OR Person.x
     def __init__(self, name,age,sex,accept,accept1):#these are local parameters while self.name is an object instance. init is executed upon object instantiated
         self.age=age #everytime a variable is called it should look like self.variableName
         self.name=name
@@ -21,14 +22,22 @@ class Person:
             self._age=newAge
         else:
             raise ValueError("Age should be between 20 and 80")
-    def display(self):
+    def display(self):#instance method
         print("My name is "+self.name)
     def greet(self):#self identifies object that called the method
         print("Hello")
         self.display()#inside the class methods are called through self but outside they are called through the object
+    @classmethod
+    def method(cls): #just like self cls (class) should be in every class method wich only can affect class variables
+        print(cls.x)#cls points to the class itself
+    @staticmethod #static methods don't use class varibles or instance variables
+    def method1(m,n):
+        return m+n
 p1=Person("Talin",23,"Female",True,False)#initiation/creation of an object
 p1.greet()
-"""
+Person.method()
+# accesing class variables: Person.x OR p1.x OR p2.x
+
 """
 Uses of Properties:
     1. data validation for existing instance attributes.
@@ -96,7 +105,7 @@ books=[book1,book2,book3,book4]
 for book in books:# display 4 instances of books
     book.display() 
 jackBooks=[book.title for book in books if book.auther=="Jack"] #list of books writeen by jack
-"""
+
 #Exercise 3
 class Fraction:
     def __init__(self,nr,dr):
@@ -110,7 +119,69 @@ class Fraction:
             self.nr=-nr
     def show(self):
         print(str(self.nr)+"/"+str(self.dr))
-    def multiply(self.)
+    def multiply(self,other):
+        if isinstance(other,int): #examines if other is an integer
+          other=Fraction(other,1)# by that if other is an integer the process cam be done
+        result=Fraction(self.nr*other.nr, self.dr*other.dr)
+        return result
+    def add(self,other):
+        if isinstance(other,int): #examines if other is an integer
+            other=Fraction(other,1)# by that if other is an integer the process cam be done
+        result=Fraction(self.nr*other.dr+other.nr*self.dr, self.dr*other.dr)
+        return result 
+
+#Exercise 4
+class Product:
+    def __init__(self, id, marked_price, discount):
+        self.id = id
+        self.marked_price = marked_price
+        self._discount = discount
+    
+    def display(self):
+        print(self.id,  self.marked_price,  self.discount)
+    @property
+    def selling_price(self):
+        self._selling_price=self.marked_price-(self.marked_price*(self.discount/100))
+        return self._selling_price
+    @property
+    def discount(self):
+        return self._discount+2 if self.marked_price > 500 else self._discount
+ 
+    @discount.setter
+    def discount(self, new_discount):
+        self._discount = new_discount
+p1 = Product('X879', 400, 6)
+print (p1.selling_price)
+p2 = Product('A234', 100, 5)
+p3 = Product('B987', 990, 4)
+print(p3.discount)
+p4 = Product('H456', 800, 6)
+
+#Exercise 5
+class Circle:
+    def __init__(self,radius):
+        self._radius=radius
+
+    def area(self):
+        return 3.14*(self._radius)**2
+    
+    @property
+    def radius(self):
+        return self._radius
+    @radius.setter
+    def radius(self,newRadius):
+        if newRadius>0:
+            self._radius=newRadius
+        else:
+            raise ValueError("Rdius can't be a negative number")
+    @property
+    def diameter(self):# properties can be about variables and not attributes
+        return 2*self._radius
+    @property
+    def circumference(self):
+        return 2*3.14*self._radius
+""" 
+
        
     
     
